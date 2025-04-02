@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتاهة الذهبية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        canvas {
+            border: 2px solid black;
+            background-color: white;
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>المتاهة الذهبية</h1>
+    <p>حاول الوصول إلى المربع الذهبي!</p>
+    <canvas id="mazeCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("mazeCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const maze = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
+            [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1]
+        ];
+
+        const tileSize = 40;
+        let playerX = 1, playerY = 1;
+
+        function drawMaze() {
+            for (let y = 0; y < maze.length; y++) {
+                for (let x = 0; x < maze[y].length; x++) {
+                    if (maze[y][x] === 1) {
+                        ctx.fillStyle = "black";
+                    } else if (maze[y][x] === 2) {
+                        ctx.fillStyle = "gold";
+                    } else {
+                        ctx.fillStyle = "white";
+                    }
+                    ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                    ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                }
+            }
+            ctx.fillStyle = "red";
+            ctx.fillRect(playerX * tileSize, playerY * tileSize, tileSize, tileSize);
+        }
+
+        function movePlayer(dx, dy) {
+            let newX = playerX + dx;
+            let newY = playerY + dy;
+
+            if (maze[newY][newX] !== 1) {
+                playerX = newX;
+                playerY = newY;
+
+                if (maze[newY][newX] === 2) {
+                    alert("مبروك! وصلت إلى الهدف 🎉");
+                }
+            }
+            drawMaze();
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowUp") movePlayer(0, -1);
+            if (event.key === "ArrowDown") movePlayer(0, 1);
+            if (event.key === "ArrowLeft") movePlayer(-1, 0);
+            if (event.key === "ArrowRight") movePlayer(1, 0);
+        });
+
+        drawMaze();
+    </script>
+</body>
+</html>
